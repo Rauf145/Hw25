@@ -35,26 +35,26 @@ void Function(int &length)
 		system("cls");
 		for (int i = 0; i < 21; i++)
 		{
-			for (int j = 0; j < 101; j++)
+			for (int j = 0; j < 108; j++)
 			{
-				if (i % 2 == 0 && j > 0 && j < 25 || i == 0 && j > 55 && j < 100 || i == 4 && j > 55 && j < 100 || menu == 13 && j > 25 && j < 50 && (i == 0 || i == 20))
+				if (i % 2 == 0 && j > 0 && j < 25 || i == 0 && j > 62 && j < 107 || i == 4 && j > 62 && j < 107 || menu == 13 && j > 25 && j < 60 && (i == 0 || i == 20))
 					cout << char(205);
-				else if (j == 0 && i > 0 && i < 20 || j == 25 && i > 0 && i < 20 || j == 55 && i > 0 && i < 4 || j == 100 && i > 0 && i < 4 || menu == 13 && j == 50 && i > 0 && i < 20)
+				else if (j == 0 && i > 0 && i < 20 || j == 25 && i > 0 && i < 20 || j == 62 && i > 0 && i < 4 || j == 107 && i > 0 && i < 4 || menu == 13 && j == 60 && i > 0 && i < 20)
 					cout << char(186);
-				else if (i == 0 && j == 0 || i == 0 && j == 55)
+				else if (i == 0 && j == 0 || i == 0 && j == 62)
 					cout << char(201);
-				else if (i == 0 && j == 25 || i == 0 && j == 100 || menu == 13 && j == 50 && i == 0)
+				else if (i == 0 && j == 25 || i == 0 && j == 107 || menu == 13 && j == 60 && i == 0)
 					cout << char(187);
-				else if (i == 20 && j == 0 || i == 4 && j == 55)
+				else if (i == 20 && j == 0 || i == 4 && j == 62)
 					cout << char(200);
-				else if (i == 20 && j == 25 || i == 4 && j == 100 || menu == 13 && j == 50 && i == 20)
+				else if (i == 20 && j == 25 || i == 4 && j == 107 || menu == 13 && j == 60 && i == 20)
 					cout << char(188);
 				else
 					cout << " ";
 			}
 			cout << endl;
 		}
-		SetConsoleCursorPosition(h, { 56, 1 });
+		SetConsoleCursorPosition(h, { 63, 1 });
 		cout << " a - add, r - remove, f - find, c - change\n";
 		SetConsoleCursorPosition(h, { 56, 2 });
 		cout << " \t\tEsc - exit";
@@ -103,7 +103,7 @@ void Function(int &length)
 			SetConsoleCursorPosition(h, { 0, 21 });
 			c = Add(c, length);
 		}
-		if (key == 'r' && length > 0 && count2 < length && menu != 13)
+		if (key == 'r' && count2 < length && menu != 13)
 		{
 			SetConsoleCursorPosition(h, { 0, 21 });
 			c = Remove(c, length, count2);
@@ -266,17 +266,15 @@ int cmp(char *str1, char *str2)
 
 Contact *Search(Contact *c, int length, int &counter2)
 {
-	int counter1 = 0, index = 0, answ;
+	int counter1 = 0, index = 0, answ = 5;
 	counter2 = 0;
 	char *tempstr;
 	char *search = new char[255];
 	Contact *searchStr = new Contact[counter2];
 	cout << "Search by 1 - name, 2 - surname, 3 - mobile, 4 - email\n";
-	cin >> answ;
-	if (answ > 4 || answ < 1)
+	while (answ < 1 || answ > 4)
 	{
-		cout << "Error\n";
-		return 0;
+		cin >> answ;
 	}
 	cout << "Search: ";
 	cin.ignore(13,'\n');

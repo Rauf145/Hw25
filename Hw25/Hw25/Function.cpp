@@ -103,7 +103,7 @@ void Function(int &length)
 			SetConsoleCursorPosition(h, { 0, 21 });
 			c = Add(c, length);
 		}
-		if (key == 'r' && length > 0 && count2 < length && menu != 13)
+		if (key == 'r' && count2 < length && menu != 13)
 		{
 			SetConsoleCursorPosition(h, { 0, 21 });
 			c = Remove(c, length, count2);

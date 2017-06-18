@@ -87,7 +87,7 @@ void Function(int &length)
 			}
 			if (i < 10 + count1 && (save_key == 'f' || save_key == 'F') && i < counter)
 			{
-				cout << search[i].name << " " << c[i].surname << endl;;
+				cout << search[i].name << " " << search[i].surname << endl;;
 				x += 2;
 			}
 		}
@@ -103,7 +103,7 @@ void Function(int &length)
 			SetConsoleCursorPosition(h, { 0, 21 });
 			c = Add(c, length);
 		}
-		if (key == 'r' && length > 0 && menu != 13)
+		if (key == 'r' && length > 0 && count2 < length && menu != 13)
 		{
 			SetConsoleCursorPosition(h, { 0, 21 });
 			c = Remove(c, length, count2);
@@ -114,16 +114,6 @@ void Function(int &length)
 			SetConsoleCursorPosition(h, { 0, 21 });
 			search = Search(c, length, counter);
 			save_key = key;
-		}
-		if (key == 's' &&  length > count2 + 1 && s_x < 19 && menu != 13)
-		{
-			s_x += 2;
-			count2++;
-		}
-		if (key == 's' && menu == 13 && x1 < 14)
-		{
-			x1 += 2;
-			count_menu++;
 		}
 		if (key == 13 && count2 < length && length > 0 && save_key != 'f')
 			menu = 13;
@@ -147,42 +137,62 @@ void Function(int &length)
 			else
 				return;
 		}
+		if (key == 's' &&  length > count2 + 1 && s_x < 19 && menu != 13) // scroll down
+		{
+			s_x += 2;
+			count2++;
+		}
 		else if (count2 >= 9 && key == 's' && count2 + 1 < length && menu != 13)
 		{
 			count1++;
 			count2++;
 		}
-		if (key == 'w' && s_x > 1 && menu != 13)
+		if (key == 's' && menu == 13 && x1 < 14)
+		{
+			x1 += 2;
+			count_menu++;
+		}
+		if (key == 'w' && s_x > 2 && menu != 13) // scroll up
 		{
 			s_x -= 2;
 			count2--;
-		}
-		if (key == 'w' && menu == 13 && x1 > 8)
-		{
-			x1 -= 2;
-			count_menu--;
 		}
 		else if (count2 > 0 && key == 'w' && menu != 13)
 		{
 			count2--;
 			count1--;
 		}
+		if (key == 'w' && menu == 13 && x1 > 8)
+		{
+			x1 -= 2;
+			count_menu--;
+		}
 	}
 }
 
 Contact *Add(Contact *c, int &length)
 {
+	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 	Contact *tempContact = new Contact[length + 1];
 	for (int i = 0; i < length; i++)
 		tempContact[i] = c[i];
 	tempContact[length].name = new char[255];
-	cout << "Enter Name\n";
+	tempContact[length].name = new char[255];
+	SetConsoleCursorPosition(h, { 78, 5 });
+	cout << "Name:\n";
+	SetConsoleCursorPosition(h, { 71, 6 });
 	cin.getline(tempContact[length].name, 255);
-	cout << "Enter Surname\n";
+	SetConsoleCursorPosition(h, { 78, 7 });
+	cout << "Surname:\n";
+	SetConsoleCursorPosition(h, { 71, 8 });
 	cin.getline(tempContact[length].surname, 255);
-	cout << "Enter mobile\n";
+	SetConsoleCursorPosition(h, { 78, 9 });
+	cout << "Mobile:\n";
+	SetConsoleCursorPosition(h, { 71, 10 });
 	cin.getline(tempContact[length].mob, 255);
-	cout << "Enter email\n";
+	SetConsoleCursorPosition(h, { 78, 11 });
+	cout << "Email:\n";
+	SetConsoleCursorPosition(h, { 71, 12 });
 	cin.getline(tempContact[length].email, 255);
 	length++;
 	delete[] c;
@@ -330,3 +340,15 @@ Contact *increaseStr(Contact *c, int &length)
 	delete[] c;
 	return tempStr;
 }
+
+
+
+//Other add
+//cout << "Enter Name\n";
+//cin.getline(tempContact[length].name, 255);
+//cout << "Enter Surname\n";
+//cin.getline(tempContact[length].surname, 255);
+//cout << "Enter mobile\n";
+//cin.getline(tempContact[length].mob, 255);
+//cout << "Enter email\n";
+//cin.getline(tempContact[length].email, 255);

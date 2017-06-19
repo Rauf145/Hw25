@@ -25,8 +25,8 @@ Contact *increaseStr(Contact *c, int &length);
 void Function(int &length)
 {
 	Contact *c = new Contact[length];
-	int count1 = 0, count2 = 0, key, save_key = 0, counter = 0, menu = 0, count_menu = 0;
-	Contact *search;
+	int count1 = 0, count2 = 0, key, save_key = 0, counter = 0, menu = 0, count_menu = 0, save_count1 = 0, save_count2 = 0;
+	Contact *search, *menu1;
 	short s_x = 1, x1 = 8;
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 	while (true)
@@ -60,22 +60,26 @@ void Function(int &length)
 		cout << " \t\tEsc - exit";
 		if (menu == 13)
 		{
+			if (save_key == 'f')
+				menu1 = search;
+			else
+				menu1 = c;
 			SetConsoleCursorPosition(h, { 34, 7 });
 			cout << "Name:\n";
 			SetConsoleCursorPosition(h, { 27, 8 });
-			cout << c[count2].name;
+			cout << menu1[count2].name;
 			SetConsoleCursorPosition(h, { 34, 9 });
 			cout << "Surname:\n";
 			SetConsoleCursorPosition(h, { 27, 10 });
-			cout << c[count2].surname << endl;
+			cout << menu1[count2].surname << endl;
 			SetConsoleCursorPosition(h, { 34, 11 });
 			cout << "Mobile:\n";
 			SetConsoleCursorPosition(h, { 27, 12 });
-			cout << c[count2].mob << endl;
+			cout << menu1[count2].mob << endl;
 			SetConsoleCursorPosition(h, { 34, 13 });
 			cout << "Email:\n";
 			SetConsoleCursorPosition(h, { 27, 14 });
-			cout << c[count2].email << endl;
+			cout << menu1[count2].email << endl;
 		}
 		for (int i = 0 + count1; i < length; i++)
 		{
@@ -109,19 +113,26 @@ void Function(int &length)
 			c = Remove(c, length, count2);
 		}
 
-		if (key == 'f' && length > 0 && menu != 13)
+		if (key == 'f' && length > 0)
 		{
 			SetConsoleCursorPosition(h, { 0, 21 });
 			search = Search(c, length, counter);
 			save_key = key;
+			save_count1 = count1;
+			save_count2 = count2;
+			count2 = 0;
+			count1 = 0;
 		}
-		if (key == 13 && count2 < length && length > 0 && save_key != 'f')
+		if (key == 13 && count2 < length && length > 0)
 			menu = 13;
 		
-		if (key == 'c' && save_key != 'f' && menu == 13)
+		if (key == 'c'  && menu == 13)
 		{
 			SetConsoleCursorPosition(h, { 0, 21 });
-			c = Change(c, length, count2, count_menu);
+			if (save_key == 'f')
+				menu1 = Change(menu1, counter, count2, count_menu);
+			else
+				menu1 = Change(menu1, length, count2, count_menu);
 			menu = 0;
 		}
 		if (key == 27)
@@ -133,6 +144,8 @@ void Function(int &length)
 			{
 				delete[]search;
 				save_key = 0;
+				count1 = save_count1;
+				count2 = save_count2;
 			}
 			else
 				return;

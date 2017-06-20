@@ -27,7 +27,7 @@ void Function(int &length)
 	Contact *c = new Contact[length];
 	int count1 = 0, count2 = 0, key, save_key = 0, counter = 0, menu = 0, count_menu = 0, save_count1 = 0, save_count2 = 0;
 	Contact *search, *menu1;
-	short s_x = 1, x1 = 8;
+	short s_x = 1, x1 = 8,save_x = 0;
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 	while (true)
 	{
@@ -122,10 +122,12 @@ void Function(int &length)
 			save_count2 = count2;
 			count2 = 0;
 			count1 = 0;
+			save_x = s_x;
+			s_x = 1;
 		}
 		if (key == 13 && count2 < length && length > 0)
 			menu = 13;
-		
+
 		if (key == 'c'  && menu == 13)
 		{
 			SetConsoleCursorPosition(h, { 0, 21 });
@@ -146,6 +148,8 @@ void Function(int &length)
 				save_key = 0;
 				count1 = save_count1;
 				count2 = save_count2;
+				s_x = save_x;
+				Sort(c, length);
 			}
 			else
 				return;
@@ -290,7 +294,7 @@ Contact *Search(Contact *c, int length, int &counter2)
 		cin >> answ;
 	}
 	cout << "Search: ";
-	cin.ignore(13,'\n');
+	cin.ignore(13, '\n');
 	cin.getline(search, 255);
 	while (search[index] != '\0')
 		index++;
@@ -351,15 +355,3 @@ Contact *increaseStr(Contact *c, int &length)
 	delete[] c;
 	return tempStr;
 }
-
-
-
-//Other add
-//cout << "Enter Name\n";
-//cin.getline(tempContact[length].name, 255);
-//cout << "Enter Surname\n";
-//cin.getline(tempContact[length].surname, 255);
-//cout << "Enter mobile\n";
-//cin.getline(tempContact[length].mob, 255);
-//cout << "Enter email\n";
-//cin.getline(tempContact[length].email, 255);

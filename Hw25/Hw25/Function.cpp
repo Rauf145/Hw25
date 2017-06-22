@@ -25,7 +25,7 @@ Contact *increaseStr(Contact *c, int &length);
 void Function(int &length)
 {
 	Contact *c = new Contact[length];
-	int count1 = 0, count2 = 0, key, save_key = 0, counter = 0, menu = 0, count_menu = 0, save_count1 = 0, save_count2 = 0;
+	int scroll = 0, flipping = 0, button, save_button = 0, counter = 0, menu = 0, count_menu = 0, save_scroll = 0, save_flipping = 0;
 	Contact *search, *menu1;
 	short s_x = 1, x1 = 8,save_x = 0;
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -60,36 +60,36 @@ void Function(int &length)
 		cout << " \t\tEsc - exit";
 		if (menu == 13)
 		{
-			if (save_key == 'f')
+			if (save_button == 'f')
 				menu1 = search;
 			else
 				menu1 = c;
 			SetConsoleCursorPosition(h, { 34, 7 });
 			cout << "Name:\n";
 			SetConsoleCursorPosition(h, { 27, 8 });
-			cout << menu1[count2].name;
+			cout << menu1[flipping].name;
 			SetConsoleCursorPosition(h, { 34, 9 });
 			cout << "Surname:\n";
 			SetConsoleCursorPosition(h, { 27, 10 });
-			cout << menu1[count2].surname << endl;
+			cout << menu1[flipping].surname << endl;
 			SetConsoleCursorPosition(h, { 34, 11 });
 			cout << "Mobile:\n";
 			SetConsoleCursorPosition(h, { 27, 12 });
-			cout << menu1[count2].mob << endl;
+			cout << menu1[flipping].mob << endl;
 			SetConsoleCursorPosition(h, { 34, 13 });
 			cout << "Email:\n";
 			SetConsoleCursorPosition(h, { 27, 14 });
-			cout << menu1[count2].email << endl;
+			cout << menu1[flipping].email << endl;
 		}
-		for (int i = 0 + count1; i < length; i++)
+		for (int i = 0 + scroll; i < length; i++)
 		{
 			SetConsoleCursorPosition(h, { 1, x });
-			if (i < 10 + count1 && save_key != 102)
+			if (i < 10 + scroll && save_button != 102)
 			{
 				cout << c[i].name << " " << c[i].surname << endl;
 				x += 2;
 			}
-			if (i < 10 + count1 && (save_key == 'f' || save_key == 'F') && i < counter)
+			if (i < 10 + scroll && (save_button == 'f' || save_button == 'F') && i < counter)
 			{
 				cout << search[i].name << " " << search[i].surname << endl;;
 				x += 2;
@@ -100,86 +100,86 @@ void Function(int &length)
 		else
 			SetConsoleCursorPosition(h, { 1, s_x });
 		if (kbhit)
-			key = getch();
+			button = getch();
 		Sleep(77);
-		if ((key == 'a' || key == 'A') && menu != 13)
+		if ((button == 'a' || button == 'A') && menu != 13)
 		{
 			SetConsoleCursorPosition(h, { 0, 21 });
 			c = Add(c, length);
 		}
-		if (key == 'r' && count2 < length && menu != 13)
+		if (button == 'r' && flipping < length && menu != 13)
 		{
 			SetConsoleCursorPosition(h, { 0, 21 });
-			c = Remove(c, length, count2);
+			c = Remove(c, length, flipping);
 		}
 
-		if (key == 'f' && length > 0)
+		if (button == 'f' && length > 0)
 		{
 			SetConsoleCursorPosition(h, { 0, 21 });
 			search = Search(c, length, counter);
-			save_key = key;
-			save_count1 = count1;
-			save_count2 = count2;
-			count2 = 0;
-			count1 = 0;
+			save_button = button;
+			save_scroll = scroll;
+			save_flipping = flipping;
+			flipping = 0;
+			scroll = 0;
 			save_x = s_x;
 			s_x = 1;
 		}
-		if (key == 13 && count2 < length && length > 0)
+		if (button == 13 && flipping < length && length > 0)
 			menu = 13;
 
-		if (key == 'c'  && menu == 13)
+		if (button == 'c'  && menu == 13)
 		{
 			SetConsoleCursorPosition(h, { 0, 21 });
-			if (save_key == 'f')
-				menu1 = Change(menu1, counter, count2, count_menu);
+			if (save_button == 'f')
+				menu1 = Change(menu1, counter, flipping, count_menu);
 			else
-				menu1 = Change(menu1, length, count2, count_menu);
+				menu1 = Change(menu1, length, flipping, count_menu);
 			menu = 0;
 		}
-		if (key == 27)
+		if (button == 27)
 		{
 			SetConsoleCursorPosition(h, { 0, 21 });
 			if (menu == 13)
 				menu = 0;
-			else if (save_key == 'f')
+			else if (save_button == 'f')
 			{
 				delete[]search;
-				save_key = 0;
-				count1 = save_count1;
-				count2 = save_count2;
+				save_button = 0;
+				scroll = save_scroll;
+				flipping = save_flipping;
 				s_x = save_x;
 				Sort(c, length);
 			}
 			else
 				return;
 		}
-		if (key == 's' && ( length > count2 + 1 && save_key != 'f' || counter > count2 + 1) && s_x < 19 && menu != 13) // scroll down
+		if (button == 's' && ( length > flipping + 1 && save_button != 'f' || counter > flipping + 1) && s_x < 19 && menu != 13) // scroll down
 		{
 			s_x += 2;
-			count2++;
+			flipping++;
 		}
-		else if (count2 >= 9 && key == 's' &&(length > count2 + 1 && save_key != 'f' || counter > count2 + 1) && menu != 13 )
+		else if (flipping >= 9 && button == 's' &&(length > flipping + 1 && save_button != 'f' || counter > flipping + 1) && menu != 13 )
 		{
-			count1++;
-			count2++;
+			scroll++;
+			flipping++;
 		}
-		if (key == 's' && menu == 13 && x1 < 14)
+		if (button == 's' && menu == 13 && x1 < 14)
 		{
 			x1 += 2;
 			count_menu++;
 		}
-		if (key == 'w' && s_x > 2 && menu != 13) // scroll up
+		if (button == 'w' && s_x > 2 && menu != 13) // scroll up
 		{
 			s_x -= 2;
-			count2--;
+			flipping--;
 		}
-		else if (count2 > 0 && key == 'w' && menu != 13)
+		else if (flipping > 0 && button == 'w' && menu != 13)
 		{
-			count2--;
-			count1--;
+			flipping--;
+			scroll--;
 		}
-		if (key == 'w' && menu == 13 && x1 > 8)
+		if (button == 'w' && menu == 13 && x1 > 8)
 		{
 			x1 -= 2;
 			count_menu--;
@@ -217,13 +217,13 @@ Contact *Add(Contact *c, int &length)
 	return tempContact;
 }
 
-Contact *Remove(Contact *c, int &length, int num)
+Contact *Remove(Contact *c, int &length, int index)
 {
 	int count = 0;
 	Contact *tempContact = new Contact[length - 1];
 	for (int i = 0; i < length; i++)
 	{
-		if (i != num)
+		if (i != index)
 		{
 			tempContact[count] = c[i];
 			count++;

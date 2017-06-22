@@ -154,12 +154,12 @@ void Function(int &length)
 			else
 				return;
 		}
-		if (key == 's' &&  length > count2 + 1 && s_x < 19 && menu != 13) // scroll down
+		if (key == 's' && ( length > count2 + 1 && save_key != 'f' || counter > count2 + 1) && s_x < 19 && menu != 13) // scroll down
 		{
 			s_x += 2;
 			count2++;
 		}
-		else if (count2 >= 9 && key == 's' && count2 + 1 < length && menu != 13)
+		else if (count2 >= 9 && key == 's' &&(length > count2 + 1 && save_key != 'f' || counter > count2 + 1) && menu != 13 )
 		{
 			count1++;
 			count2++;

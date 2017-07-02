@@ -31,7 +31,7 @@ void Function(int &length)
 	short s_x = 1, x1 = 8, save_x = 0, y = 0;
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 	strcpy(address, getenv("USERPROFILE"));
-	strcat(address, "\\Desktop\\file.bin");
+	strcat(address, "\\Desktop\\contact.bin");
 	if ((file = fopen(address, "r+")) != 0)
 	{
 		length = atoi(fgets(buffer, 255, file));
@@ -359,7 +359,9 @@ Contact *Search(Contact *c, int length, int &counter2)
 				tempstr = c[i].mob;
 			if (answ == 4)
 				tempstr = c[i].email;
-			if (tempstr[j] == search[counter1])
+			if (tempstr[j] == search[counter1] || (int(search[counter1]) > 96 && int(search[counter1]) < 123) && int(tempstr[j]) == int(search[counter1]) - 32)
+				counter1++;
+			if ((int(search[counter1]) > 64 && int(search[counter1]) < 91) && int(tempstr[j]) == int(search[counter1]) + 32)
 				counter1++;
 			else if (counter1 < index)
 			{

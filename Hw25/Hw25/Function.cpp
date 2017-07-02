@@ -7,10 +7,10 @@ using namespace std;
 
 struct Contact
 {
-	char *name = new char[255];
-	char *surname = new char[255];
-	char *mob = new char[255];
-	char *email = new char[255];
+	char name[20];
+	char surname[20];
+	char mob[20];
+	char email[50];
 };
 
 Contact *Add(Contact *c, int &length);
@@ -24,11 +24,26 @@ Contact *increaseStr(Contact *c, int &length);
 
 void Function(int &length)
 {
-	Contact *c = new Contact[length];
-	int scroll = 0, flipping = 0, button, save_button = 0, counter = 0, menu = 0, count_menu = 0, save_scroll = 0, save_flipping = 0;
+	FILE *file;
+	char address[_MAX_PATH], buffer[4];
+	int scroll = 0, flipping = 0, button, save_button = 0, counter = 0, menu = 0, count_menu = 0, save_scroll = 0, save_flipping = 0, check = 0;
 	Contact *search, *menu1;
-	short s_x = 1, x1 = 8,save_x = 0;
+	short s_x = 1, x1 = 8, save_x = 0, y = 0;
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+	strcpy(address, getenv("USERPROFILE"));
+	strcat(address, "\\Desktop\\file.bin");
+	if ((file = fopen(address, "r+")) != 0)
+	{
+		length = atoi(fgets(buffer, 255, file));
+		check = 1;
+	}
+	Contact *c = new Contact[length];
+	if (check == 1)
+	{
+		fread(c, sizeof(Contact) * length, 1, file);
+		fclose(file);
+	}
+
 	while (true)
 	{
 		short x = 1;
@@ -137,7 +152,11 @@ void Function(int &length)
 				menu1 = Change(menu1, length, flipping, count_menu);
 			menu = 0;
 		}
-		if (button == 27)
+		if (button == 27 && save_button != 'f' && menu != 13)
+		{
+			break;
+		}
+		if (button == 27 && (save_button == 'f' || menu == 13))
 		{
 			SetConsoleCursorPosition(h, { 0, 21 });
 			if (menu == 13)
@@ -151,15 +170,13 @@ void Function(int &length)
 				s_x = save_x;
 				Sort(c, length);
 			}
-			else
-				return;
 		}
-		if (button == 's' && ( length > flipping + 1 && save_button != 'f' || counter > flipping + 1) && s_x < 19 && menu != 13) // scroll down
+		if (button == 's' && (length > flipping + 1 && save_button != 'f' || counter > flipping + 1) && s_x < 19 && menu != 13) // scroll down
 		{
 			s_x += 2;
 			flipping++;
 		}
-		else if (flipping >= 9 && button == 's' &&(length > flipping + 1 && save_button != 'f' || counter > flipping + 1) && menu != 13 )
+		else if (flipping >= 9 && button == 's' && (length > flipping + 1 && save_button != 'f' || counter > flipping + 1) && menu != 13)
 		{
 			scroll++;
 			flipping++;
@@ -185,6 +202,40 @@ void Function(int &length)
 			count_menu--;
 		}
 	}
+	s_x = 25;
+	y = 47;
+	SetConsoleCursorPosition(h, { 45, 23 });
+	cout << "Save changes?";
+	SetConsoleCursorPosition(h, { 47, 25 });
+	cout << "Yes";
+	SetConsoleCursorPosition(h, { 53, 25 });
+	cout << "No";
+	while (true)
+	{
+		SetConsoleCursorPosition(h, { y, s_x });
+		button = getch();
+		if (button == 97 && y == 53)
+		{
+			y = 47;
+			check = 1;
+		}
+		if (button == 100 && y == 47)
+		{
+			y = 53;
+			check = 0;
+		}
+		SetConsoleCursorPosition(h, { 0, 26 });
+		if (button == 13 && check == 0)
+			return;
+		else if (button == 13 && check == 1)
+			break;
+	}
+	file = fopen(address, "wb");
+	itoa(length, buffer, 10);
+	fputs(buffer, file);
+	fputc('\n', file);
+	fwrite(c, sizeof(Contact) * length, 1, file);
+	fclose(file);
 }
 
 Contact *Add(Contact *c, int &length)
@@ -193,8 +244,6 @@ Contact *Add(Contact *c, int &length)
 	Contact *tempContact = new Contact[length + 1];
 	for (int i = 0; i < length; i++)
 		tempContact[i] = c[i];
-	tempContact[length].name = new char[255];
-	tempContact[length].name = new char[255];
 	SetConsoleCursorPosition(h, { 78, 5 });
 	cout << "Name:\n";
 	SetConsoleCursorPosition(h, { 71, 6 });
@@ -217,13 +266,13 @@ Contact *Add(Contact *c, int &length)
 	return tempContact;
 }
 
-Contact *Remove(Contact *c, int &length, int index)
+Contact *Remove(Contact *c, int &length, int num)
 {
 	int count = 0;
 	Contact *tempContact = new Contact[length - 1];
 	for (int i = 0; i < length; i++)
 	{
-		if (i != index)
+		if (i != num)
 		{
 			tempContact[count] = c[i];
 			count++;

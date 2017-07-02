@@ -21,7 +21,6 @@ Contact *Search(Contact *c, int length, int &counter2);
 Contact *Change(Contact *c, int length, int count, int index);
 Contact *increaseStr(Contact *c, int &length);
 
-
 void Function(int &length)
 {
 	FILE *file;
@@ -43,7 +42,6 @@ void Function(int &length)
 		fread(c, sizeof(Contact) * length, 1, file);
 		fclose(file);
 	}
-
 	while (true)
 	{
 		short x = 1;
@@ -127,8 +125,7 @@ void Function(int &length)
 			SetConsoleCursorPosition(h, { 0, 21 });
 			c = Remove(c, length, flipping);
 		}
-
-		if (button == 'f' && length > 0)
+		if (button == 'f' && length > 0 && save_button != 'f' && menu != 13)
 		{
 			SetConsoleCursorPosition(h, { 0, 21 });
 			search = Search(c, length, counter);
@@ -140,9 +137,8 @@ void Function(int &length)
 			save_x = s_x;
 			s_x = 1;
 		}
-		if (button == 13 && flipping < length && length > 0)
+		if (button == 13 && (flipping < length && length > 0  && save_button != 'f' || save_button == 'f' && counter > 0))
 			menu = 13;
-
 		if (button == 'c'  && menu == 13)
 		{
 			SetConsoleCursorPosition(h, { 0, 21 });
@@ -153,9 +149,7 @@ void Function(int &length)
 			menu = 0;
 		}
 		if (button == 27 && save_button != 'f' && menu != 13)
-		{
 			break;
-		}
 		if (button == 27 && (save_button == 'f' || menu == 13))
 		{
 			SetConsoleCursorPosition(h, { 0, 21 });
@@ -339,9 +333,7 @@ Contact *Search(Contact *c, int length, int &counter2)
 	Contact *searchStr = new Contact[counter2];
 	cout << "Search by 1 - name, 2 - surname, 3 - mobile, 4 - email\n";
 	while (answ < 1 || answ > 4)
-	{
 		cin >> answ;
-	}
 	cout << "Search: ";
 	cin.ignore(13, '\n');
 	cin.getline(search, 255);
@@ -359,9 +351,11 @@ Contact *Search(Contact *c, int length, int &counter2)
 				tempstr = c[i].mob;
 			if (answ == 4)
 				tempstr = c[i].email;
-			if (tempstr[j] == search[counter1] || (int(search[counter1]) > 96 && int(search[counter1]) < 123) && int(tempstr[j]) == int(search[counter1]) - 32)
+			if (tempstr[j] == search[counter1])
 				counter1++;
-			if ((int(search[counter1]) > 64 && int(search[counter1]) < 91) && int(tempstr[j]) == int(search[counter1]) + 32)
+			else if ((int(search[counter1]) > 96 && int(search[counter1]) < 123) && int(tempstr[j]) == int(search[counter1]) - 32)
+				counter1++;
+			else if ((int(search[counter1]) > 64 && int(search[counter1]) < 91) && int(tempstr[j]) == int(search[counter1]) + 32)
 				counter1++;
 			else if (counter1 < index)
 			{
